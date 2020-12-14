@@ -3,23 +3,19 @@
 
 #include <librealsense2/rs.hpp> // Include RealSense Cross Platform API
 #include <librealsense2/rsutil.h>
-#include <dlib/image_processing/frontal_face_detector.h>
+#include <dlib/image_processing/frontal_face_detector.h> // Dlib
 #include <dlib/image_processing/render_face_detections.h>
 #include <dlib/image_processing.h>
 #include <dlib/gui_widgets.h>
 #include <dlib/image_io.h>
-#include <chrono>
-#include <boost/uuid/uuid.hpp>
+#include <chrono> // Time
+#include <boost/uuid/uuid.hpp> // uuid
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <fstream>              // File IO
-#include <iostream>             // Terminal IO
-#include <sstream>              // Stringstreams
+#include <iostream> // Terminal IO
 #include <tuple>
 #include <array>
-// 3rd party header for writing png files
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "rs_frame_image.h"
 
 using namespace dlib;
 using namespace std;
@@ -27,21 +23,18 @@ using namespace chrono;
 
 image_window win;
 
-auto getMouse2DPoint(string filename)
+auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 > &img)
 {
     try
 	{
         std::array<std::tuple<int, int>, 21> points{};
         // 创建人脸识别器
         frontal_face_detector detector = get_frontal_face_detector();
-        // 创建并初始化人脸特征点识别器
-        shape_predictor sp;
-        deserialize("./shape_predictor_68_face_landmarks.dat") >> sp;
-
-        cout << "正在处理图片：" << filename << endl;
-        // 读取图像
-        array2d<rgb_pixel> img;
-        load_image(img, filename);
+		// 创建并初始化人脸特征点识别器
+		shape_predictor sp;
+		deserialize("./shape_predictor_68_face_landmarks.dat") >> sp;
+        cout << "正在处理新图像..."<< endl;
+        // 显示图像
         win.clear_overlay();
         win.set_image(img);
         // 人脸识别
@@ -75,7 +68,7 @@ auto getMouse2DPoint(string filename)
         int xCenter = xCenterSum / 20, yCenter = yCenterSum / 20;
         points[20] = make_tuple(xCenter, yCenter);
 		cout << "嘴部中心位置：" << xCenter << "," << yCenter << endl;
-        // 展示特征点
+		// 展示特征点
         shapes.push_back(shape);
         win.add_overlay(render_face_detections(shapes));
         return make_tuple(true, points);
@@ -85,15 +78,6 @@ auto getMouse2DPoint(string filename)
         cout << "\nexception thrown!" << endl;
         cout << e.what() << endl;
     }
-}
-
-void saveFrameToPng(string filename, rs2::video_frame& vf) {
-    stringstream png_file;
-    cout << "rs-save-to-disk-output-" << vf.get_profile().stream_name();
-    png_file << filename;
-    stbi_write_png(png_file.str().c_str(), vf.get_width(), vf.get_height(),
-        vf.get_bytes_per_pixel(), vf.get_data(), vf.get_stride_in_bytes());
-    cout << " Saved " << png_file.str() << endl;
 }
 
 int main(int argc, char* argv[]) try
@@ -112,10 +96,9 @@ int main(int argc, char* argv[]) try
         rs2::depth_frame depth = frames.get_depth_frame();
         rs2::video_frame vf = frames.get_color_frame();
         // 保存彩色图像
-		const string filename = "./faces/" + boost::uuids::to_string(boost::uuids::random_generator()()) + ".png";
-        saveFrameToPng(filename, vf);
+        rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 > image(vf);
         // 从图像中识别嘴的坐标和距离
-        auto res = getMouse2DPoint(filename);
+        auto res = getMouse2DPoint(image);
         auto succ = get<0>(res);
 		auto& points = get<1>(res);
 		if (!succ)
@@ -147,7 +130,7 @@ int main(int argc, char* argv[]) try
         // 输出三维坐标
 		cout << "三维坐标计算完毕：" << point[0] << " , " << point[1] << " , " << point[2] << endl;
     }
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 catch (const rs2::error& e)
 {
