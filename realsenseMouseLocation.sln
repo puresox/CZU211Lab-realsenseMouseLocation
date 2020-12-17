@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "realsenseMouseLocation", "realsenseMouseLocation\realsenseMouseLocation.vcxproj", "{CE07CA53-403F-4D04-8907-E99F2BCBE61E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{6063657A-7E0F-44F8-B217-4211B929CC9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{CE07CA53-403F-4D04-8907-E99F2BCBE61E}.Release|x64.Build.0 = Release|x64
 		{CE07CA53-403F-4D04-8907-E99F2BCBE61E}.Release|x86.ActiveCfg = Release|Win32
 		{CE07CA53-403F-4D04-8907-E99F2BCBE61E}.Release|x86.Build.0 = Release|Win32
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Debug|x64.ActiveCfg = Debug|x64
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Debug|x64.Build.0 = Debug|x64
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Debug|x86.ActiveCfg = Debug|Win32
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Debug|x86.Build.0 = Debug|Win32
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Release|x64.ActiveCfg = Release|x64
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Release|x64.Build.0 = Release|x64
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Release|x86.ActiveCfg = Release|Win32
+		{6063657A-7E0F-44F8-B217-4211B929CC9B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
