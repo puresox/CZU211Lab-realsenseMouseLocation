@@ -32,7 +32,7 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		frontal_face_detector detector = get_frontal_face_detector();
 		// 创建并初始化人脸特征点识别器
 		shape_predictor sp;
-		deserialize("./shape_predictor_68_face_landmarks.dat") >> sp;
+		deserialize("../shape_predictor_68_face_landmarks.dat") >> sp;
 		cout << "正在处理新图像..." << endl;
 		// 显示图像
 		win.clear_overlay();

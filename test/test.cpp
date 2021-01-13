@@ -67,7 +67,7 @@ int main(int argc, char** argv)
 		// 初始化
 		frontal_face_detector detector = get_frontal_face_detector();
 		shape_predictor sp;
-		deserialize("./shape_predictor_68_face_landmarks.dat") >> sp;
+		deserialize("../shape_predictor_68_face_landmarks.dat") >> sp;
 
 		// 获取测试集所有图片
 		std::vector<string> filenames = {};
