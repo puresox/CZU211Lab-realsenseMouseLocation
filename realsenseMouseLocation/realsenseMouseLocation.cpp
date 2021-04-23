@@ -21,7 +21,7 @@ using namespace dlib;
 using namespace std;
 using namespace chrono;
 
-image_window win;
+//image_window win;
 
 auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 {
@@ -35,8 +35,8 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		deserialize("../shape_predictor_68_face_landmarks.dat") >> sp;
 		// cout << "正在处理新图像..." << endl;
 		// 显示图像
-		win.clear_overlay();
-		win.set_image(img);
+		/*win.clear_overlay();
+		win.set_image(img);*/
 		// 人脸识别
 		auto start = system_clock::now();
 		std::vector<rectangle> dets = detector(img);
@@ -70,7 +70,7 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		// cout << "嘴部中心位置：" << xCenter << "," << yCenter << endl;
 		// 展示特征点
 		shapes.push_back(shape);
-		win.add_overlay(render_face_detections(shapes));
+		//win.add_overlay(render_face_detections(shapes));
 		return make_tuple(true, points);
 	}
 	catch (exception& e)
