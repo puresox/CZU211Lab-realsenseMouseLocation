@@ -33,7 +33,7 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		// 创建并初始化人脸特征点识别器
 		shape_predictor sp;
 		deserialize("../shape_predictor_68_face_landmarks.dat") >> sp;
-		cout << "正在处理新图像..." << endl;
+		// cout << "正在处理新图像..." << endl;
 		// 显示图像
 		win.clear_overlay();
 		win.set_image(img);
@@ -42,10 +42,10 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		std::vector<rectangle> dets = detector(img);
 		auto end = system_clock::now();
 		auto duration = duration_cast<microseconds>(end - start);
-		cout << "人脸识别花费了"
+		/*cout << "人脸识别花费了"
 			<< double(duration.count()) * microseconds::period::num / microseconds::period::den
-			<< "秒" << endl;
-		cout << "检测到人脸数：" << dets.size() << endl;
+			<< "秒" << endl;*/
+		// cout << "检测到人脸数：" << dets.size() << endl;
 		if (dets.size() == 0)
 		{
 			return make_tuple(false, points);
@@ -53,12 +53,12 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		// 从第一个人脸中识别特征点
 		full_object_detection shape = sp(img, dets[0]);
 		std::vector<full_object_detection> shapes;
-		cout << "共有特征点数：" << shape.num_parts() << endl;
+		// cout << "共有特征点数：" << shape.num_parts() << endl;
 		// 输出嘴部20个特征点坐标以及中心坐标
 		int xCenterSum = 0, yCenterSum = 0;
 		for (int shapeNum = 48; shapeNum < 68; shapeNum++)
 		{
-			cout << "第" << shapeNum << "个特征点位置：" << shape.part(shapeNum) << endl;
+			// cout << "第" << shapeNum << "个特征点位置：" << shape.part(shapeNum) << endl;
 			int partX = shape.part(shapeNum).x();
 			int partY = shape.part(shapeNum).y();
 			xCenterSum += partX;
@@ -67,7 +67,7 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		}
 		int xCenter = xCenterSum / 20, yCenter = yCenterSum / 20;
 		points[20] = make_tuple(xCenter, yCenter);
-		cout << "嘴部中心位置：" << xCenter << "," << yCenter << endl;
+		// cout << "嘴部中心位置：" << xCenter << "," << yCenter << endl;
 		// 展示特征点
 		shapes.push_back(shape);
 		win.add_overlay(render_face_detections(shapes));
@@ -75,8 +75,8 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 	}
 	catch (exception& e)
 	{
-		cout << "\nexception thrown!" << endl;
-		cout << e.what() << endl;
+		// cout << "\nexception thrown!" << endl;
+		// cout << e.what() << endl;
 	}
 }
 
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) try
 		auto& points = get<1>(res);
 		if (!succ)
 		{
-			cout << "未检测到人脸" << endl;
+			// cout << "未检测到人脸" << endl;
 			continue;
 		}
 		float dist_to_mouse = 0.0;
@@ -124,10 +124,10 @@ int main(int argc, char* argv[]) try
 		auto y = get<1>(points[20]);
 		if (dist_to_mouse == 0.0)
 		{
-			cout << "距离为0，重新检测" << endl;
+			// cout << "距离为0，重新检测" << endl;
 			continue;
 		}
-		cout << "距离嘴" << dist_to_mouse << "米远 " << endl;
+		// cout << "距离嘴" << dist_to_mouse << "米远 " << endl;
 		// 坐标转换
 		float point[3];
 		float pixel[2]{ x,y };
@@ -135,7 +135,9 @@ int main(int argc, char* argv[]) try
 		rs2_deproject_pixel_to_point(point, &intr, pixel, dist_to_mouse);
 		transformation(point);
 		// 输出三维坐标
-		cout << "三维坐标计算完毕：" << point[0] << " , " << point[1] << " , " << point[2] << endl;
+		// cout << "三维坐标计算完毕：" << point[0] << " , " << point[1] << " , " << point[2] << endl;
+		cout << "(" << point[0] << "," << point[1] << "," << point[2] << ")" << endl;
+		break;
 	}
 	return EXIT_SUCCESS;
 }
