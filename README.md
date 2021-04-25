@@ -6,8 +6,7 @@
 ```shell
 cd realsenseMouseLocation/realsenseMouseLocation/
 mkdir build && cd build
-cmake ..
-cmake --build . --config Release
+cmake .. && cmake --build . --config Release
 cp realsenseMouseLocation ../realsenseMouseLocation
 ```
 
@@ -17,6 +16,8 @@ cp realsenseMouseLocation ../realsenseMouseLocation
 cd ~/realsenseMouseLocation/realsenseMouseLocation
 ./realsenseMouseLocation
 ```
+
+要在这个目录下执行文件因为要调用`shape_predictor_68_face_landmarks.dat`。也可以在代码中改为绝对路径。
 
 ## 环境配置
 

@@ -35,8 +35,8 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		deserialize("../shape_predictor_68_face_landmarks.dat") >> sp;
 		// cout << "正在处理新图像..." << endl;
 		// 显示图像
-		/*win.clear_overlay();
-		win.set_image(img);*/
+		//win.clear_overlay();
+		//win.set_image(img);
 		// 人脸识别
 		auto start = system_clock::now();
 		std::vector<rectangle> dets = detector(img);
@@ -45,7 +45,7 @@ auto getMouse2DPoint(rs_frame_image< dlib::rgb_pixel, RS2_FORMAT_RGB8 >& img)
 		/*cout << "人脸识别花费了"
 			<< double(duration.count()) * microseconds::period::num / microseconds::period::den
 			<< "秒" << endl;*/
-		// cout << "检测到人脸数：" << dets.size() << endl;
+			// cout << "检测到人脸数：" << dets.size() << endl;
 		if (dets.size() == 0)
 		{
 			return make_tuple(false, points);
@@ -151,4 +151,3 @@ catch (const exception& e)
 	cerr << e.what() << endl;
 	return EXIT_FAILURE;
 }
-
