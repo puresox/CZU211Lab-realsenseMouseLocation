@@ -1,28 +1,10 @@
 # realsenseMouseLocation
 深度相机获取嘴部坐标
 
-## 编译
-
-```shell
-cd realsenseMouseLocation/realsenseMouseLocation/
-mkdir build && cd build
-cmake .. && cmake --build . --config Release
-cp realsenseMouseLocation ../realsenseMouseLocation
-```
-
-## 运行
-
-```shell
-cd ~/realsenseMouseLocation/realsenseMouseLocation
-./realsenseMouseLocation
-```
-
-要在这个目录下执行文件因为要调用`shape_predictor_68_face_landmarks.dat`。也可以在代码中改为绝对路径。
-
 ## 环境配置
 
 1. 将压缩文件放入服务器并解压缩`unzip realsenseMouseLocation-master.zip`。
-2. 根据[教程](https://github.com/IntelRealSense/librealsense/blob/development/doc/RaspberryPi3.md)安装librealsense。
+2. 根据[教程](https://github.com/acrobotic/Ai_Demos_RPi/wiki/Raspberry-Pi-4-and-Intel-RealSense-D435)安装librealsense。
 3. 安装[dlib](http://dlib.net/)：将dlib压缩文件放到服务器解压缩，使用说明见`dlib/examples/CMakeLists.txt`。
 4. 安装[bootstrap](https://www.boost.org/)：`sudo apt-get install libboost-all-dev`。
 5. 写`CMakeLists.txt`。
@@ -50,3 +32,20 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 ```
 
+## 编译
+
+```shell
+cd realsenseMouseLocation/realsenseMouseLocation/
+mkdir build && cd build
+cmake .. && cmake --build . --config Release
+cp realsenseMouseLocation ../realsenseMouseLocation
+```
+
+## 运行
+
+```shell
+cd ~/realsenseMouseLocation/realsenseMouseLocation
+./realsenseMouseLocation
+```
+
+要在这个目录下执行文件因为要调用`shape_predictor_68_face_landmarks.dat`。也可以在代码中改为绝对路径。
