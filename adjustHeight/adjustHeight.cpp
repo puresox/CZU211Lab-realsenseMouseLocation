@@ -113,7 +113,7 @@ auto adjustHeight(int signal)
 
 int main(int argc, char *argv[])
 {
-    deserialize("/home/pi/realsenseMouseLocation-master/shape_predictor_68_face_landmarks.dat") >> sp;
+    deserialize("/home/pi/CZU211Lab-realsenseMouseLocation/shape_predictor_68_face_landmarks.dat") >> sp;
 
     // 调整高度
     adjustHeight();
