@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(librealsenseSDK "/home/ubuntu/librealsense-master")
+set(librealsenseSDK "/home/pi/librealsense-master/")
 
 # set the project name
 project(realsenseMouseLocation)
 
 # add the dlib library
-add_subdirectory(/home/ubuntu/dlib-19.21/dlib dlib_build)
+add_subdirectory(/home/pi/dlib-master/dlib/ dlib_build)
 
 # add the executable
 add_executable(realsenseMouseLocation realsenseMouseLocation.cpp)
