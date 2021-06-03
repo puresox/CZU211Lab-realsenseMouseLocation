@@ -21,8 +21,14 @@ using namespace dlib;
 using namespace std;
 
 //image_window win;
+// 创建人脸识别器
+frontal_face_detector detector = get_frontal_face_detector();
 
-auto getMouse2DPoint(frontal_face_detector &detector, shape_predictor &sp, rs_frame_image<dlib::rgb_pixel, RS2_FORMAT_RGB8> &img)
+// 创建并初始化人脸特征点识别器
+shape_predictor sp;
+
+// 从2D图片中获取嘴部坐标
+auto getMouse2DPoint(rs_frame_image<dlib::rgb_pixel, RS2_FORMAT_RGB8> &img)
 {
 	std::array<std::tuple<int, int>, 21> points{};
 
@@ -39,7 +45,7 @@ auto getMouse2DPoint(frontal_face_detector &detector, shape_predictor &sp, rs_fr
 	}
 	// 从第一个人脸中识别特征点
 	full_object_detection shape = sp(img, dets[0]);
-	std::vector<full_object_detection> shapes;
+	// std::vector<full_object_detection> shapes;
 	// cout << "共有特征点数：" << shape.num_parts() << endl;
 	// 输出嘴部20个特征点坐标以及中心坐标
 	int xCenterSum = 0, yCenterSum = 0;
@@ -56,27 +62,13 @@ auto getMouse2DPoint(frontal_face_detector &detector, shape_predictor &sp, rs_fr
 	points[20] = make_tuple(xCenter, yCenter);
 	// cout << "嘴部中心位置：" << xCenter << "," << yCenter << endl;
 	// 展示特征点
-	shapes.push_back(shape);
-	//win.add_overlay(render_face_detections(shapes));
+	// shapes.push_back(shape);
+	// win.add_overlay(render_face_detections(shapes));
 	return make_tuple(true, points);
 }
 
-void transformation(float point[3])
+auto getMouse3DPoint()
 {
-	point[0] += 0;
-	point[1] += 0;
-	point[2] += 0;
-}
-
-int main(int argc, char *argv[])
-{
-	// 创建人脸识别器
-	frontal_face_detector detector = get_frontal_face_detector();
-
-	// 创建并初始化人脸特征点识别器
-	shape_predictor sp;
-	deserialize("/home/pi/realsenseMouseLocation-master/shape_predictor_68_face_landmarks.dat") >> sp;
-
 	rs2::pipeline pipe;
 	pipe.start();
 	rs2::align align_to_color(RS2_STREAM_COLOR);
@@ -94,7 +86,7 @@ int main(int argc, char *argv[])
 		// 保存彩色图像
 		rs_frame_image<dlib::rgb_pixel, RS2_FORMAT_RGB8> image(vf);
 		// 从图像中识别嘴的坐标和距离
-		auto res = getMouse2DPoint(detector, sp, image);
+		auto res = getMouse2DPoint(image);
 		auto succ = get<0>(res);
 		auto &points = get<1>(res);
 		if (!succ)
@@ -123,11 +115,20 @@ int main(int argc, char *argv[])
 		float pixel[2]{x, y};
 		rs2_intrinsics intr = frames.get_profile().as<rs2::video_stream_profile>().get_intrinsics();
 		rs2_deproject_pixel_to_point(point, &intr, pixel, dist_to_mouse);
-		transformation(point);
 		// 输出三维坐标
 		// cout << "三维坐标计算完毕：" << point[0] << " , " << point[1] << " , " << point[2] << endl;
 		cout << "(" << point[0] << "," << point[1] << "," << point[2] << ")" << endl;
 		break;
 	}
+	pipe.stop();
+}
+
+int main(int argc, char *argv[])
+{
+	deserialize("/home/pi/realsenseMouseLocation-master/shape_predictor_68_face_landmarks.dat") >> sp;
+
+	// 获取嘴部三维坐标
+	getMouse3DPoint();
+
 	return EXIT_SUCCESS;
 }
