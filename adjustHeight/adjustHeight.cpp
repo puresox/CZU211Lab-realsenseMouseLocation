@@ -67,7 +67,7 @@ auto getMouse2DPoint(rs_frame_image<dlib::rgb_pixel, RS2_FORMAT_RGB8> &img)
     return make_tuple(true, points);
 }
 
-auto adjustHeight(int signal)
+auto adjustHeight()
 {
     rs2::pipeline pipe;
     pipe.start();
