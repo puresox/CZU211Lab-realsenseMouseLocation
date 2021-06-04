@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-set(librealsenseSDK "/home/pi/librealsense-master/")
+set(librealsenseSDK "/home/pi/librealsense/")
 
 # set the project name
 project(realsenseMouseLocation)

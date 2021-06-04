@@ -1,51 +1,34 @@
-# realsenseMouseLocation
+# CZU211Lab-realsenseMouseLocation
 深度相机获取嘴部坐标
 
 ## 环境配置
 
-1. 将压缩文件放入服务器并解压缩`unzip realsenseMouseLocation-master.zip`。
+1. 克隆CZU211Lab-realsenseMouseLocation。
 2. 根据[教程](https://github.com/acrobotic/Ai_Demos_RPi/wiki/Raspberry-Pi-4-and-Intel-RealSense-D435)安装librealsense。
 3. 安装[dlib](http://dlib.net/)：将dlib压缩文件放到服务器解压缩，使用说明见`dlib/examples/CMakeLists.txt`。
 4. 安装[bootstrap](https://www.boost.org/)：`sudo apt-get install libboost-all-dev`。
-5. 写`CMakeLists.txt`。
-
-```cmake
-cmake_minimum_required(VERSION 3.10)
-
-set(librealsenseSDK "/home/pi/librealsense-master")
-
-# set the project name
-project(realsenseMouseLocation)
-
-# add the dlib library
-add_subdirectory(/home/pi/dlib-master/dlib/ dlib_build)
-
-# add the executable
-add_executable(realsenseMouseLocation realsenseMouseLocation.cpp)
-
-target_link_libraries(realsenseMouseLocation dlib::dlib "/usr/local/lib/librealsense2.so")
-
-target_include_directories(realsenseMouseLocation PUBLIC "${PROJECT_BINARY_DIR}" "${librealsenseSDK}/third-party")
-
-# specify the C++ standard
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-```
+5. 修改`CMakeLists.txt`。
 
 ## 编译
 
 ```shell
-cd realsenseMouseLocation/realsenseMouseLocation/
+cd CZU211Lab-realsenseMouseLocation/realsenseMouseLocation/
 mkdir build && cd build
 cmake .. && cmake --build . --config Release
-cp realsenseMouseLocation ../realsenseMouseLocation
+
+cd CZU211Lab-realsenseMouseLocation/adjustHeight/
+mkdir build && cd build
+cmake .. && cmake --build . --config Release
 ```
 
 ## 运行
 
 ```shell
-cd ~/realsenseMouseLocation/realsenseMouseLocation
+cd ~/CZU211Lab-realsenseMouseLocation/realsenseMouseLocation/build
 ./realsenseMouseLocation
+
+cd ~/CZU211Lab-realsenseMouseLocation/adjustHeight/build
+./adjustHeight
 ```
 
 要在这个目录下执行文件因为要调用`shape_predictor_68_face_landmarks.dat`。也可以在代码中改为绝对路径。
