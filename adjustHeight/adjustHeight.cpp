@@ -92,7 +92,7 @@ auto adjustHeight()
         }
         auto x = get<0>(points[20]);
         auto y = get<1>(points[20]);
-        if (y < 240)
+        if (y < 200)
         {
             cout << "up" << endl;
             continue;
