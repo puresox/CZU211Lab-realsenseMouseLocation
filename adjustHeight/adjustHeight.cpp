@@ -92,12 +92,12 @@ auto adjustHeight()
         }
         auto x = get<0>(points[20]);
         auto y = get<1>(points[20]);
-        if (y < 160)
+        if (y < 240)
         {
             cout << "up" << endl;
             continue;
         }
-        else if (y > 320)
+        else if (y > 360)
         {
             cout << "down" << endl;
             continue;
