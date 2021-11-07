@@ -6,7 +6,7 @@ set(librealsenseSDK "/home/pi/librealsense/")
 project(adjustHeight)
 
 # add the dlib library
-add_subdirectory(/home/pi/dlib-master/dlib/ dlib_build)
+add_subdirectory(/home/pi/dlib/dlib/ dlib_build)
 
 # add the executable
 add_executable(adjustHeight adjustHeight.cpp)
