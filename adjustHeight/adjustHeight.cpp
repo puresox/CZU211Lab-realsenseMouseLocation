@@ -71,13 +71,17 @@ auto adjustHeight()
 {
     rs2::pipeline pipe;
     pipe.start();
+    rs2::align align_to_color(RS2_STREAM_COLOR);
     // 去掉开始前几秒的帧
     for (int i = 0; i < 30; i++)
         rs2::frameset frames = pipe.wait_for_frames();
     while (true)
     {
         rs2::frameset frames = pipe.wait_for_frames();
-        // 获取彩色帧，彩色图大小：640*480
+        // 替换为对齐后的数据，不对其的话彩色图大小：640*480，深度图大小：848*480
+        frames = align_to_color.process(frames);
+        // 获取深度帧和彩色帧
+        rs2::depth_frame depth = frames.get_depth_frame();
         rs2::video_frame vf = frames.get_color_frame();
         // 保存彩色图像
         rs_frame_image<dlib::rgb_pixel, RS2_FORMAT_RGB8> image(vf);
@@ -90,23 +94,30 @@ auto adjustHeight()
             // cout << "未检测到人脸" << endl;
             continue;
         }
+        float dist_to_mouse = 0.0;
+        for (int i = 20; (i >= 0) && (dist_to_mouse == 0.0); i--)
+        {
+            auto &point = points[i];
+            auto x = get<0>(point);
+            auto y = get<1>(point);
+            dist_to_mouse = depth.get_distance(x, y);
+        }
         auto x = get<0>(points[20]);
         auto y = get<1>(points[20]);
-        if (y < 240)
+        if (dist_to_mouse == 0.0)
         {
-            cout << "up" << endl;
+            // cout << "距离为0，重新检测" << endl;
             continue;
         }
-        else if (y > 400)
-        {
-            cout << "down" << endl;
-            continue;
-        }
-        else
-        {
-            cout << "stop" << endl;
-        }
-        break;
+        // cout << "距离嘴" << dist_to_mouse << "米远 " << endl;
+        // 坐标转换
+        float point[3];
+        float pixel[2]{x, y};
+        rs2_intrinsics intr = frames.get_profile().as<rs2::video_stream_profile>().get_intrinsics();
+        rs2_deproject_pixel_to_point(point, &intr, pixel, dist_to_mouse);
+        // 输出三维坐标
+        // cout << "三维坐标计算完毕：" << point[0] << " , " << point[1] << " , " << point[2] << endl;
+        cout << "(" << point[0] << "," << point[1] << "," << point[2] << ")" << endl;
     }
     pipe.stop();
 }
@@ -115,7 +126,7 @@ int main(int argc, char *argv[])
 {
     deserialize("/home/pi/CZU211Lab-realsenseMouseLocation/shape_predictor_68_face_landmarks.dat") >> sp;
 
-    // 调整高度
+    // 获取嘴部三维坐标
     adjustHeight();
 
     return EXIT_SUCCESS;
